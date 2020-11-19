@@ -1,7 +1,32 @@
 
 # Coders-HQ Backend
 
-This repository holds the Coders-HQ backend. It is made using [Django](https://www.djangoproject.com/) and [Postgres](https://www.postgresql.org/) as an API backend to the Coders-HQ frontend which is hosted on another repository.
+This repository holds the Coders-HQ backend. It is made using [Django](https://www.djangoproject.com/) and [Postgres](https://www.postgresql.org/) as an API backend to the Coders-HQ frontend (based on [React](https://reactjs.org/)) which is hosted on another repository.
+
+## Architecture
+
+The front-end will be located in its own repository which can connect to django's REST framework. The REST framework makes it easy to integrate any frontend to django's API which makes it possible to work on the front and backend separately. The final architecture should look something like this.
+
+```
+├──chq_frontend
+| ├──public/
+| ├──src/
+| ├──Dockerfile          
+| ├──package.json
+| └──package-lock.json
+├──chq_backend
+| ├──chq_backend/
+| ├──media/
+| ├──static/
+| ├──Dockerfile         
+| ├──entrypoint.sh      // bash entrypoint for django to run commands before running the server
+| ├──manage.py          
+| ├──requirements.txt
+| └──settings.ini
+└──docker-compose.yaml  //for running multi-conatiner application
+```
+
+__Currently the docker-compose.yml is located inside this repository but will eventually be pulled out top integrate the frontend with the backend.__
 
 ## Database
 
