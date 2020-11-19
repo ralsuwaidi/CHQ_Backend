@@ -12,4 +12,4 @@ RUN pip install -r requirements.txt
 COPY . ./
 
 # exposes port
-EXPOSE 8000
+EXPOSE 33325

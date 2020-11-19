@@ -9,10 +9,10 @@ services:
       - POSTGRES_PASSWORD=postgres
   backend:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:33325
     volumes:
       - .:/app/backend
     ports:
-      - "33325:8000"
+      - "33325:33325"
     depends_on:
       - db
