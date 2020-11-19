@@ -30,7 +30,12 @@ __Currently the docker-compose.yml is located inside this repository but will ev
 
 ## Database
 
-Django should be connected to postgres (postgres can be installed locally or using docker) but there is an option to use sqlite for development. Although sqlite should not be used for release. To switch between sqlite or postgres change `DATABASES = ...` in settings.py
+Django should be connected to postgres (postgres can be installed locally or using docker) but there is an option to use sqlite for development. __Sqlite should not be used for release.__ To switch between sqlite or postgres use the [migrate function](https://docs.djangoproject.com/en/3.1/topics/db/multi-db/#synchronizing-your-databases) like so:
+
+```
+$ ./manage.py migrate   
+$ ./manage.py migrate --database=postgres
+```
 
 Docker makes it easy to set up postgres. The docker-compose.yaml file creates and connects the two containers (django+postgres) together, you can also create postgres by itself and connect to django which you build locally.
 
