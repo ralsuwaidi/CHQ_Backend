@@ -3,3 +3,7 @@
 
 # python build
 __pycache__
+
+# temp database
+*.sqlite3
+migrations

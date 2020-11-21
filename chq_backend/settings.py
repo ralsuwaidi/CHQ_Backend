@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -88,6 +89,11 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+
+# Custom User Model
+# https://testdriven.io/blog/django-custom-user-model/
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 
 # Password validation
