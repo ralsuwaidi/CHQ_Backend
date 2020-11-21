@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-
 class CustomUser(AbstractUser):
     """New class called CustomUser that subclasses AbstractUser and removed the username field"""
 
