@@ -1,6 +1,6 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect,reverse
-from users.forms import CustomUserCreationForm
+from django.shortcuts import render, redirect, reverse
+from users.forms import CustomUserCreationForm, ProfileForm
 from django.contrib.auth import login
 
 
@@ -9,7 +9,17 @@ def index(request):
 
 
 def profile(request):
-    return render(request, "users/profile.html")
+    if request.method == "GET":
+        return render(
+            request, "users/profile.html",
+            {"form": ProfileForm}
+        )
+    elif request.method == "POST":
+        form = ProfileForm(data=request.POST, instance=request.user) 
+        if form.is_valid():
+            user = form.save()
+            # login(request, user)
+            return redirect(reverse("users:profile"))
 
 
 def register(request):

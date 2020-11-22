@@ -3,6 +3,17 @@
 {% block content %}
 Hello, {{ user.first_name|default:'Guest' }}!
 
+{% if user.is_authenticated %}
+<div>
+    {% load crispy_forms_tags %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Update Profile</button>
+    </form>
+</div>
+{% endif %}
+
 <div>
     {% if user.is_authenticated %}
         <a href="{% url 'users:logout' %}">Logout</a>
