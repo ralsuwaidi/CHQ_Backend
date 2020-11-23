@@ -17,7 +17,8 @@ def profile(request):
     elif request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=request.user) 
         if form.is_valid():
-            form.save()
+            user=form.save()
+            print(user.has_profile_picture())
             # login(request, user)
             return redirect(reverse("users:profile"))
 

@@ -21,6 +21,9 @@ class CustomUser(AbstractUser):
 
     github_url = models.URLField(blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures', null=True,blank=True)
+    cv = models.FileField(_("Upload your CV"), upload_to="CV", max_length=100, blank=True)
+    bachelor_degree = models.CharField(_("Enter your bachelors degree"), max_length=30, blank=True)
+    masters_degree = models.CharField(_("Enter your master's degree"), max_length=30, blank=True)
 
 
     # remove username and use email as the unique identifier
@@ -32,3 +35,8 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    def has_profile_picture(self):
+        if self.profile_picture != '':
+            return True
+        return False
