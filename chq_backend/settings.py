@@ -24,6 +24,8 @@ LOGOUT_REDIRECT_URL = "users:profile"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'unc1@lx6k=@zxw19w%eh%=h$eq=&8d6@hl_)-xt05sc*f*4%ex'
 
@@ -141,3 +143,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = BASE_DIR / 'media'

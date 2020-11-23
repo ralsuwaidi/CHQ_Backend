@@ -15,9 +15,9 @@ def profile(request):
             {"form": ProfileForm}
         )
     elif request.method == "POST":
-        form = ProfileForm(data=request.POST, instance=request.user) 
+        form = ProfileForm(request.POST, request.FILES, instance=request.user) 
         if form.is_valid():
-            user = form.save()
+            form.save()
             # login(request, user)
             return redirect(reverse("users:profile"))
 

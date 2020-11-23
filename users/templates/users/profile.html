@@ -6,7 +6,7 @@ Hello, {{ user.first_name|default:'Guest' }}!
 {% if user.is_authenticated %}
 <div>
     {% load crispy_forms_tags %}
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
         <button type="submit" class="btn btn-success">Update Profile</button>
