@@ -2,6 +2,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, reverse
 from users.forms import CustomUserCreationForm, ProfileForm
 from django.contrib.auth import login
+from rest_framework import viewsets          # add this
+from .serializers import CustomUserSerializer      # add this
+from .models import CustomUser                     # add this
+
+class CustomUserView(viewsets.ModelViewSet):       # add this
+    serializer_class = CustomUserSerializer          # add this
+    queryset = CustomUser.objects.all()              # add this
 
 
 def index(request):
