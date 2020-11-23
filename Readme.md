@@ -61,3 +61,10 @@ Docker makes it easy to set up postgres. The docker-compose.yaml file creates an
 3.  Run `docker-compose up` in root dir and it will create the django and postgres apps, it will also run the web app
 1.  On a web browser open localhost:33325
 
+## API
+
+The api can be accessed for the users, currently there are only basic information that can be accessed for each user (check the users/serializer).
+
+### Access the API
+
+Run the app. create a superuser and/or multiple user (use users/register). After creating one or multiple users head over to /users/profile and edit the data. The data would then be reflected at the endpont /api/users.
