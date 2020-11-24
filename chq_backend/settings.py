@@ -25,7 +25,6 @@ LOGOUT_REDIRECT_URL = "users:profile"
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'unc1@lx6k=@zxw19w%eh%=h$eq=&8d6@hl_)-xt05sc*f*4%ex'
 
@@ -34,13 +33,21 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
 
 # Application definition
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'crispy_forms',
     'corsheaders',
-    'rest_framework', 
+    'rest_framework',
+    'rest_framework.authtoken',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_auth',
+    'rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -62,6 +69,25 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Authentication
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
 CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 

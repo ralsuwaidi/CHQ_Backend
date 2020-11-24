@@ -7,9 +7,11 @@ name = "pypi"
 Django = "<4.0,>=3.0"
 psycopg2-binary = ">=2.8"
 django-crispy-forms = "*"
-pillow = "*"
+Pillow = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+django-rest-auth = "*"
+django-allauth = "*"
 
 [dev-packages]
 pylint = "*"

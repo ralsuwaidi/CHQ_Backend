@@ -22,11 +22,11 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 
-        'favourite_language',
-        'bio', 
-        'profile_picture',
-        'cv',
-        'bachelor_degree',
-        'masters_degree'
-        ]
+        fields = ['first_name',
+                  'favourite_language',
+                  'bio',
+                  'profile_picture',
+                  'cv',
+                  'bachelor_degree',
+                  'masters_degree'
+                  ]
