@@ -1,22 +1,23 @@
 from django.contrib.auth import login
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, reverse
-from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import generics
+
 from users.forms import CustomUserCreationForm, ProfileForm
 
-from .models import CustomUser
-from .serializers import CustomUserSerializer, RegistrationSerializer
+from .models import CustomUser, Profile
+from .serializers import UserSerializer, RegistrationSerializer, ProfileSerializer
 
-
-class CustomUserView(viewsets.ModelViewSet):
-    serializer_class = CustomUserSerializer
-    queryset = CustomUser.objects.all()
 
 # resitrict to post request
-@api_view(['POST',])
+@api_view(['POST', ])
 def register(request):
+    """
+    An endpoint for registering user
+    email,password,password2
+    """
     serializer = RegistrationSerializer(data=request.data)
     print(request.data)
     data = {}
@@ -29,9 +30,17 @@ def register(request):
     return Response(data)
 
 
+class UserList(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
 
-def index(request):
-    return HttpResponse("You're looking at the index page")
+class UserDetail(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+class ProfileView(generics.ListCreateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 
 def profile(request):
@@ -47,17 +56,3 @@ def profile(request):
             print(user.has_profile_picture())
             # login(request, user)
             return redirect(reverse("users:profile"))
-
-
-# def register(request):
-#     if request.method == "GET":
-#         return render(
-#             request, "users/register.html",
-#             {"form": CustomUserCreationForm}
-#         )
-#     elif request.method == "POST":
-#         form = CustomUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             return redirect(reverse("users:profile"))

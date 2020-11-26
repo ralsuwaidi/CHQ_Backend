@@ -1,18 +1,25 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Profile
+from django.contrib.auth.password_validation import validate_password
 
 
-class CustomUserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = CustomUser
-        fields = ('email',
-                  'favourite_language',
-                  'bio',
-                  'github_url',
-                  'bachelor_degree',
-                  'masters_degree',
-                  'cv'
-                  )
+        fields = ['id',
+                  'email',
+                  ]
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
+    class Meta:
+        model = Profile
+        fields = ['bio','user']
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

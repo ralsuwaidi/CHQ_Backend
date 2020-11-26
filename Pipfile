@@ -12,6 +12,7 @@ djangorestframework = "*"
 django-cors-headers = "*"
 django-rest-auth = "*"
 django-allauth = "*"
+httpie = "*"
 
 [dev-packages]
 pylint = "*"
