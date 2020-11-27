@@ -11,12 +11,13 @@ Pillow = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 httpie = "*"
+django-allauth = "*"
 
 [dev-packages]
 pylint = "*"
 
 [requires]
-python_version = "3.8"
+python_version = ">=3.4"
 
 [packages.django-rest-auth]
 extras = [ "with-social",]

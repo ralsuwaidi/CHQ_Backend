@@ -25,7 +25,7 @@ SECRET_KEY = 'mebi9$1mn#ygkt3++@6co6s4ha64r)g2z4h8f+mdwhlkg6#4ef'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.62', '127.0.0.1']
 
 
 # Application definition
@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,6 +82,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'chq_backend.wsgi.application'
 
