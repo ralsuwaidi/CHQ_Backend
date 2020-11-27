@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.username')
+    username = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Profile
-        fields = ['github_url', 'bio','user']
+        fields = ['github_url', 'bio','username']
 
 
 class UserSerializer(serializers.ModelSerializer):
