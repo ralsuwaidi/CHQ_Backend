@@ -35,10 +35,11 @@ The api can be accessed for the users, currently there are only basic informatio
 
 CHQ_Backend has a few API endpoints set for autherizing users. A token based autherization is used but can be replaced if needed. Currently these have been tested:
 
-#### api/login/
-(using httpie)
+(you can use httpie to test these)
 
-`http POST http://127.0.0.1:33325/auth/login/ username="myuser" email="myemail@email.com" password="mypassword"`
+#### api/login/
+
+```http POST http://127.0.0.1:33325/auth/login/ username="myuser" email="myemail@email.com" password="mypassword"```
 
 REPLY: __Token__
 
@@ -46,8 +47,7 @@ REPLY: __Token__
 
 To use token authentication you need to pass the token value to the Autherization header like so.
 
-`http POST http://127.0.0.1:33325/auth/password/change/ new_password1="password" new_password2="password" Authorization:"Token 1e96797099b6a42c39f95af7eb3637e4894f161d"`
-
+```http POST http://127.0.0.1:33325/auth/password/change/ new_password1="password" new_password2="password" Authorization:"Token 1e96797099b6a42c39f95af7eb3637e4894f161d"```
 ## Architecture
 
 The front-end will be located in its own repository which can connect to django's REST framework. The REST framework makes it easy to integrate any frontend to django's API which makes it possible to work on the front and backend separately. The final architecture should look something like this.

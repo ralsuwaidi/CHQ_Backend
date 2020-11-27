@@ -1,3 +1,7 @@
 from django.db import models
 
-# Create your models here.
+class Profile(models.Model):
+    github_url = models.URLField(null=True)
+    bio = models.TextField(blank=True)
+    user = models.ForeignKey('auth.User', related_name='profile',on_delete=models.CASCADE)
+
