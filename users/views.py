@@ -1,17 +1,15 @@
 from django.contrib.auth.models import User
-from django.http import HttpResponse, JsonResponse
-from rest_framework import generics, mixins, permissions, status
+from rest_framework import generics, mixins, permissions
 from rest_framework.decorators import api_view
-from rest_framework.parsers import JSONParser
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
-from django.http import Http404
 
 from users.models import Profile
 from users.permissions import IsOwnerOrReadOnly
 from users.serializers import ProfileSerializer, UserSerializer
-from rest_framework.generics import get_object_or_404
+
 
 class ProfileList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
