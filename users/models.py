@@ -1,7 +1,17 @@
 from django.db import models
 
 
-class RateSelf(models.Model):
+class Profile(models.Model):
+    github_url = models.URLField(blank=True, default="")
+    bio = models.TextField(blank=True)
+    username = models.ForeignKey(
+        'auth.User', related_name='profile', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "%s's profile" % (self.username.username)
+
+
+class CriteriaWithScore(models.Model):
     FRONTEND = 'FE'
     BACKEND = 'BE'
     DATABASE = 'DA'
@@ -14,13 +24,25 @@ class RateSelf(models.Model):
         (DEVOPS, 'Devops'),
         (MOBILE, 'Mobile'),
     ]
-    Criteria = models.CharField(
+    criteria_name = models.CharField(
         max_length=2,
         choices=CRITERIA_CHOICES,
     )
+    score = models.IntegerField(null=False)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
 
-    
-class Profile(models.Model):
-    github_url = models.URLField(null=True)
-    bio = models.TextField(blank=True)
-    username = models.ForeignKey('auth.User', related_name='profile',on_delete=models.CASCADE)
+    def __str__(self):
+        return self.criteria_name
+
+
+class LanguageWithScore(models.Model):
+    name = models.CharField(max_length=30)
+    score = models.IntegerField()
+    criteria = models.ForeignKey(
+        CriteriaWithScore, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return "%s %d" % (self.name, self.score)
+
+    class Meta:
+        ordering = ['score']
