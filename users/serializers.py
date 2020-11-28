@@ -5,15 +5,18 @@ from django.contrib.auth.models import User
 
 class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='user.username')
+    first_name = serializers.ReadOnlyField(source='user.first_name')
+    last_name = serializers.ReadOnlyField(source='user.last_name')
+    email = serializers.ReadOnlyField(source='user.email')
+
     class Meta:
         model = Profile
-        fields = ['github_url', 'bio','username']
+        fields = [
+            'github_url',
+            'bio',
+            'username',
+            'first_name',
+            'last_name',
+            'email'
+        ]
 
-
-class UserSerializer(serializers.ModelSerializer):
-    profile = serializers.PrimaryKeyRelatedField(
-        many=False, queryset=Profile.objects.all())
-
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'profile']

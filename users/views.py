@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from users.models import Profile
 from users.permissions import IsOwnerOrReadOnly
-from users.serializers import ProfileSerializer, UserSerializer
+from users.serializers import ProfileSerializer
 
 
 class ProfileList(mixins.ListModelMixin,
@@ -38,8 +38,7 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'username'
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
-    
-    
+
     def get_object(self):
         """
         Returns the object the view is displaying.
@@ -62,7 +61,7 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
         filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
         user = get_object_or_404(queryset, **filter_kwargs)
-        
+
         try:
             # get profile of user has a profile
             profile = Profile.objects.get(id=user.id)
@@ -75,9 +74,6 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
         return profile
 
-
-
-
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
@@ -88,21 +84,8 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly]
-
-
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'users': reverse('user-list', request=request, format=format),
         'profiles': reverse('profile-list', request=request, format=format)
     })

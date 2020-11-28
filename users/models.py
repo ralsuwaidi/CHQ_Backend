@@ -4,11 +4,11 @@ from django.db import models
 class Profile(models.Model):
     github_url = models.URLField(blank=True, default="")
     bio = models.TextField(blank=True)
-    username = models.ForeignKey(
+    user = models.ForeignKey(
         'auth.User', related_name='profile', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s's profile" % (self.username.username)
+        return "%s's profile" % (self.user.user)
 
 
 class CriteriaWithScore(models.Model):
