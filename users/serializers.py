@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import Profile
+from users.models import Profile, LanguageWithScore
 from django.contrib.auth.models import User
 
 
@@ -17,6 +17,12 @@ class ProfileSerializer(serializers.ModelSerializer):
             'username',
             'first_name',
             'last_name',
-            'email'
+            'email',
+            'mobile_score',
+            'devops_score',
+            'front_end_score',
+            'back_end_score',
+            'database_score',
         ]
+
 

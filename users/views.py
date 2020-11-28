@@ -6,13 +6,12 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 
-from users.models import Profile
+from users.models import Profile, LanguageWithScore
 from users.permissions import IsOwnerOrReadOnly
-from users.serializers import ProfileSerializer
+from users.serializers import ProfileSerializer, LanguageWithScore
 
 
 class ProfileList(mixins.ListModelMixin,
-                  mixins.CreateModelMixin,
                   generics.GenericAPIView):
     """
     List all snippets, or create a new profile.
@@ -52,13 +51,6 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
         # Perform the lookup filtering.
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
 
-        assert lookup_url_kwarg in self.kwargs, (
-            'Expected view %s to be called with a URL keyword argument '
-            'named "%s". Fix your URL conf, or set the `.lookup_field` '
-            'attribute on the view correctly.' %
-            (self.__class__.__name__, lookup_url_kwarg)
-        )
-
         filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
         user = get_object_or_404(queryset, **filter_kwargs)
 
@@ -67,21 +59,23 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
             profile = Profile.objects.get(id=user.id)
         except:
             # ceate new profile for the user
-            profile = Profile(id=user.id, username=user)
+            profile = Profile(id=user.id, user=user)
 
         # May raise a permission denied
         self.check_object_permissions(self.request, profile)
 
         return profile
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+    # def put(self, request,username, format=None):
+    #     profile = self.get_object()
+    #     print(request.data)
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+    #     serializer = ProfileSerializer(profile, data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
 
 
 @api_view(['GET'])
@@ -89,3 +83,4 @@ def api_root(request, format=None):
     return Response({
         'profiles': reverse('profile-list', request=request, format=format)
     })
+
