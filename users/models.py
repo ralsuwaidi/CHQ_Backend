@@ -1,6 +1,7 @@
 from django.db import models
 from users.exceptions import ScoreNot100
 
+
 class Profile(models.Model):
     github_url = models.URLField(blank=True, default="")
     bio = models.TextField(blank=True)
@@ -23,21 +24,19 @@ class Profile(models.Model):
         Use the `pygments` library to create a highlighted HTML
         representation of the code snippet.
         """
-        if self.total_score()!=100:
-            print(self.total_score())
+        if self.total_score() != 100:
             raise ScoreNot100
         super(Profile, self).save(*args, **kwargs)
-
 
 
 class LanguageWithScore(models.Model):
     name = models.CharField(max_length=30)
     score = models.IntegerField()
     profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, null=True, related_name='profile')
+        Profile, on_delete=models.CASCADE, related_name='languages')
 
     def __str__(self):
-        return "%s %d" % (self.name, self.score)
+        return "%s: %d" % (self.name, self.score)
 
     class Meta:
         ordering = ['score']

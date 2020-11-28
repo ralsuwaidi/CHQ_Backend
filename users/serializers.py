@@ -8,6 +8,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.ReadOnlyField(source='user.first_name')
     last_name = serializers.ReadOnlyField(source='user.last_name')
     email = serializers.ReadOnlyField(source='user.email')
+    languages = serializers.StringRelatedField(many=True,  allow_null=True)
 
     class Meta:
         model = Profile
@@ -23,6 +24,14 @@ class ProfileSerializer(serializers.ModelSerializer):
             'front_end_score',
             'back_end_score',
             'database_score',
+            'languages',
         ]
 
 
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LanguageWithScore
+        fields = [
+            'name',
+            'score',
+        ]

@@ -1,34 +1,17 @@
 from django.contrib.auth.models import User
-from rest_framework import generics, mixins, permissions
-from rest_framework.decorators import api_view
+from rest_framework import generics, mixins, permissions, status
+from rest_framework.decorators import (api_view, authentication_classes,
+                                       permission_classes)
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 
-from users.models import Profile, LanguageWithScore
+from users.exceptions import ProfileNotCreated, CannotCreateSameLanguage
+from users.models import LanguageWithScore, Profile
 from users.permissions import IsOwnerOrReadOnly
-from users.serializers import ProfileSerializer, LanguageWithScore
-
-
-class ProfileList(mixins.ListModelMixin,
-                  generics.GenericAPIView):
-    """
-    List all snippets, or create a new profile.
-    """
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly]
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+from users.serializers import LanguageSerializer, ProfileSerializer
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -77,10 +60,41 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
         'profiles': reverse('profile-list', request=request, format=format)
     })
 
+
+@api_view(['POST', 'GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def add_language(request, username):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'POST':
+        serializer = LanguageSerializer(data=request.data)
+        if serializer.is_valid():
+            user = User.objects.get(username=username)
+
+            # check if profile exists
+            try:
+                profile = Profile.objects.get(user=user.id)
+            except:
+                raise ProfileNotCreated
+
+            # same language cannot be added twice
+            languages = LanguageWithScore.objects.all()
+            if languages.filter(name=request.data['name']).exists():
+                raise CannotCreateSameLanguage
+            
+            # save to db
+            serializer.save(profile=profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'GET':
+        lang = LanguageWithScore.objects.all()
+        serializer = LanguageSerializer(lang, many=True)
+        return Response(serializer.data)
