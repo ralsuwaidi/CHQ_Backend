@@ -62,8 +62,6 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
         filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
         user = get_object_or_404(queryset, **filter_kwargs)
-        # self.check_object_permissions(self.request, user)
-
         profile = Profile.objects.get(id=user.id)
 
         # May raise a permission denied
