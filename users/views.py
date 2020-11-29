@@ -49,16 +49,6 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
         return profile
 
-    # def put(self, request,username, format=None):
-    #     profile = self.get_object()
-    #     print(request.data)
-
-    #     serializer = ProfileSerializer(profile, data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET'])
 def api_root(request, format=None):
@@ -95,6 +85,8 @@ def add_language(request, username):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'GET':
-        lang = LanguageWithScore.objects.all()
+        # get all languages related to user
+        user = User.objects.get(username=username)
+        lang = LanguageWithScore.objects.filter(profile=user.pk)
         serializer = LanguageSerializer(lang, many=True)
         return Response(serializer.data)
