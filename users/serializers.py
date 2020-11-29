@@ -25,6 +25,9 @@ class ProfileSerializer(serializers.ModelSerializer):
             'back_end_score',
             'database_score',
             'languages',
+            'cv',
+            'academic_qualification',
+            'academic_qualification_file'
         ]
 
 

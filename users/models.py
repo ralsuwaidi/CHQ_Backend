@@ -12,6 +12,9 @@ class Profile(models.Model):
     mobile_score = models.IntegerField(null=False, default=20)
     user = models.ForeignKey(
         'auth.User', related_name='profile', on_delete=models.CASCADE)
+    cv = models.FileField(null=True,upload_to="cv")
+    academic_qualification = models.CharField(blank=True, max_length=30)
+    academic_qualification_file = models.FileField(null=True,upload_to="academic")
 
     def __str__(self):
         return "%s's profile" % (self.user)

@@ -49,6 +49,8 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
         return profile
 
+    
+
 
 @api_view(['GET'])
 def api_root(request, format=None):
