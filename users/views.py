@@ -66,7 +66,7 @@ def add_language(request, username):
     if request.method == 'POST':
         serializer = LanguageSerializer(data=request.data)
         if serializer.is_valid():
-            user = User.objects.get(username=username)
+            user = get_object_or_404(User.objects.all(), username=username)
 
             # check if profile exists
             try:
@@ -78,7 +78,7 @@ def add_language(request, username):
             languages = LanguageWithScore.objects.all()
             if languages.filter(name=request.data['name']).exists():
                 raise CannotCreateSameLanguage
-            
+
             # save to db
             serializer.save(profile=profile)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -86,7 +86,7 @@ def add_language(request, username):
 
     elif request.method == 'GET':
         # get all languages related to user
-        user = User.objects.get(username=username)
+        user = get_object_or_404(User.objects.all(), username=username)
         lang = LanguageWithScore.objects.filter(profile=user.pk)
         serializer = LanguageSerializer(lang, many=True)
         return Response(serializer.data)
