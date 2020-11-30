@@ -29,25 +29,8 @@ This repository holds the Coders-HQ backend. It is made using [Django](https://w
 
 ## API
 
-The api can be accessed for the users, currently there are only basic information that can be accessed for each user (check the users/serializer).
+All information related to the API can be found [here](https://documenter.getpostman.com/view/13659675/TVmJjeuV#fa7f976b-17fd-41dc-92a9-2e1cf3347f50).
 
-### Access the API
-
-CHQ_Backend has a few API endpoints set for autherizing users. A token based autherization is used but can be replaced if needed. Currently these have been tested:
-
-(you can use httpie to test these)
-
-#### api/login/
-
-```http POST http://127.0.0.1:33325/auth/login/ username="myuser" email="myemail@email.com" password="mypassword"```
-
-REPLY: __Token__
-
-#### api/password/change/
-
-To use token authentication you need to pass the token value to the Autherization header like so.
-
-```http POST http://127.0.0.1:33325/auth/password/change/ new_password1="password" new_password2="password" Authorization:"Token 1e96797099b6a42c39f95af7eb3637e4894f161d"```
 ## Architecture
 
 The front-end will be located in its own repository which can connect to django's REST framework. The REST framework makes it easy to integrate any frontend to django's API which makes it possible to work on the front and backend separately. The final architecture should look something like this.
