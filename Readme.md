@@ -29,7 +29,7 @@ This repository holds the Coders-HQ backend. It is made using [Django](https://w
 
 ## API
 
-All information related to the API can be found [here](https://documenter.getpostman.com/view/13659675/TVmJjeuV#fa7f976b-17fd-41dc-92a9-2e1cf3347f50).
+All information related to the API can be found [here](https://documenter.getpostman.com/view/13659675/TVmJjeuV).
 
 ## Architecture
 

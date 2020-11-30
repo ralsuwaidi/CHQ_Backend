@@ -1,3 +1,6 @@
+import time
+
+import requests
 from django.contrib.auth.models import User
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.decorators import (api_view, authentication_classes,
@@ -8,10 +11,11 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 
-from users.exceptions import ProfileNotCreated, CannotCreateSameLanguage
-from users.models import LanguageWithScore, Profile, Hackathon
+from users.exceptions import CannotCreateSameLanguage, ProfileNotCreated
+from users.models import Hackathon, LanguageWithScore, Profile
 from users.permissions import IsOwnerOrReadOnly
-from users.serializers import LanguageSerializer, ProfileSerializer, HackathonSerializer
+from users.serializers import (HackathonSerializer, LanguageSerializer,
+                               ProfileSerializer)
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -100,3 +104,23 @@ class HackathonViewset(viewsets.ModelViewSet):
     """
     queryset = Hackathon.objects.all()
     serializer_class = HackathonSerializer
+
+
+@api_view(['GET', ])
+def external_api_view(request, id=None):
+    attempt_num = 0  # keep track of how many times we've retried
+    while attempt_num < 5:
+        if id is None:
+            r = requests.get(
+                "https://hacker-news.firebaseio.com/v0/topstories.json", timeout=10)
+        else:
+            r = requests.get(
+                "https://hacker-news.firebaseio.com/v0/item/{}.json?".format(id), timeout=10)
+        if r.status_code == 200:
+            data = r.json()
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            attempt_num += 1
+            # You can probably use a logger to log the error here
+            time.sleep(5)  # Wait for 5 seconds before re-trying
+    return Response({"error": "Request failed"}, status=r.status_code)
