@@ -51,7 +51,7 @@ class LanguageWithScore(models.Model):
 class Hackathon(models.Model):
     date = models.DateField()
     location = models.CharField(max_length=30)
-    members = models.ManyToManyField(Profile, related_name="profile", blank=True)
+    members = models.ManyToManyField(Profile, related_name="hackathons", blank=True)
     website = models.URLField(null=True)
     title = models.CharField(max_length=30)
 

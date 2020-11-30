@@ -11,6 +11,19 @@ class LanguageSerializer(serializers.ModelSerializer):
             'score',
         ]
 
+class HackathonSerializer(serializers.ModelSerializer):
+    class Meta:
+        ordering = ['-date']
+        model = Hackathon
+        fields = [
+            'date',
+            'location',
+            'members',
+            'website',
+            'title',
+            'id'
+        ]
+        extra_kwargs = {'members': {'required': False}}
 
 class ProfileSerializer(serializers.ModelSerializer):
     """for projects you can use list seperator if more than one"""
@@ -19,6 +32,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     last_name = serializers.ReadOnlyField(source='user.last_name')
     email = serializers.ReadOnlyField(source='user.email')
     languages = LanguageSerializer(many=True,  read_only=True)
+    hackathons = HackathonSerializer(many=True, read_only=True)
 
     class Meta:
         model = Profile
@@ -38,18 +52,8 @@ class ProfileSerializer(serializers.ModelSerializer):
             'cv',
             'academic_qualification',
             'academic_qualification_file',
-            'projects'
+            'projects',
+            'hackathons'
         ]
+        extra_kwargs = {'hackathons': {'required': False}}
 
-class HackathonSerializer(serializers.ModelSerializer):
-    members = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all(), many=True)
-    class Meta:
-        model = Hackathon
-        fields = [
-            'date',
-            'location',
-            'members',
-            'website',
-            'title',
-            'id'
-        ]

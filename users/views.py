@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, viewsets
 from rest_framework.decorators import (api_view, authentication_classes,
                                        permission_classes)
 from rest_framework.generics import get_object_or_404
@@ -94,32 +94,9 @@ def add_language(request, username):
         return Response(serializer.data)
 
 
-class HackathonList(generics.ListCreateAPIView):
+class HackathonViewset(viewsets.ModelViewSet):
+    """many to many relationship
+    https://medium.com/@kingsleytorlowei/building-a-many-to-many-modelled-rest-api-with-django-rest-framework-d41f54fe372
+    """
     queryset = Hackathon.objects.all()
     serializer_class = HackathonSerializer
-
-
-class HackathonDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Hackathon.objects.all()
-    serializer_class = HackathonSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        data = request.POST.copy()
-
-        # previous profiles as objects
-        profile = instance.members.all()
-
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=partial)
-        
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
