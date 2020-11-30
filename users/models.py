@@ -2,6 +2,7 @@ from django.db import models
 from users.exceptions import ScoreNot100
 from django.utils.translation import gettext_lazy as _
 
+
 class Profile(models.Model):
     github_url = models.URLField(blank=True, default="")
     bio = models.TextField(blank=True)
@@ -14,7 +15,7 @@ class Profile(models.Model):
     academic_qualification = models.CharField(blank=True, max_length=30)
     academic_qualification_file = models.FileField(
         null=True, upload_to="academic")
-    projects = models.CharField(_("projects"),blank=True,max_length=200)
+    projects = models.CharField(_("projects"), blank=True, max_length=200)
     user = models.ForeignKey(
         'auth.User', related_name='profile', on_delete=models.CASCADE)
 
@@ -45,3 +46,17 @@ class LanguageWithScore(models.Model):
 
     class Meta:
         ordering = ['score']
+
+
+class Hackathon(models.Model):
+    date = models.DateField()
+    location = models.CharField(max_length=30)
+    members = models.ManyToManyField(Profile, related_name="profile", blank=True)
+    website = models.URLField(null=True)
+    title = models.CharField(max_length=30)
+
+    class Meta:
+        ordering = ['date']
+
+    def __str__(self):
+        return self.title

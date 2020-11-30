@@ -1,6 +1,15 @@
 from rest_framework import serializers
-from users.models import Profile, LanguageWithScore
+from users.models import Profile, LanguageWithScore, Hackathon
 from django.contrib.auth.models import User
+
+
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LanguageWithScore
+        fields = [
+            'name',
+            'score',
+        ]
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -9,7 +18,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.ReadOnlyField(source='user.first_name')
     last_name = serializers.ReadOnlyField(source='user.last_name')
     email = serializers.ReadOnlyField(source='user.email')
-    languages = serializers.StringRelatedField(many=True,  allow_null=True)
+    languages = LanguageSerializer(many=True,  read_only=True)
 
     class Meta:
         model = Profile
@@ -32,11 +41,15 @@ class ProfileSerializer(serializers.ModelSerializer):
             'projects'
         ]
 
-
-class LanguageSerializer(serializers.ModelSerializer):
+class HackathonSerializer(serializers.ModelSerializer):
+    members = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all(), many=True)
     class Meta:
-        model = LanguageWithScore
+        model = Hackathon
         fields = [
-            'name',
-            'score',
+            'date',
+            'location',
+            'members',
+            'website',
+            'title',
+            'id'
         ]
