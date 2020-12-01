@@ -11,6 +11,7 @@ router.register(r'hackathons', views.HackathonViewset, basename='hackathon')
 urlpatterns = [
     path('profiles/<str:username>/', views.ProfileDetail.as_view()),
     path('profiles/add_language/<str:username>/', views.add_language),
+    path('',views.index),
     path('', include(router.urls)),
     path('external-api/<int:id>/', views.external_api_view),
     path('external-api/', views.external_api_view),

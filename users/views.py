@@ -62,6 +62,12 @@ def api_root(request, format=None):
         'profiles': reverse('profile-list', request=request, format=format)
     })
 
+@api_view(['GET'])
+def index(request):
+    data={}
+    data["api-documentation"]="https://documenter.getpostman.com/view/13659675/TVmJjeuV"
+    return Response(data=data)
+
 
 @api_view(['POST', 'GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
