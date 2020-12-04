@@ -19,3 +19,5 @@ RUN pip install django-heroku
 COPY . ./
 
 RUN python manage.py makemigrations && python manage.py migrate
+
+EXPOSE 33325
