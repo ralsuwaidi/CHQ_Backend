@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'django.contrib.sites',
     'allauth',
+    'corsheaders',
     'allauth.account',
     'rest_auth.registration',
     'django.contrib.sessions',
@@ -56,11 +57,15 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+ALLOWED_HOSTS=['*']
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
