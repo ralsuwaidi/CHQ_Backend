@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3 AS worker
 ENV PYTHONUNBUFFERED 1
 
 # sets the working dir
@@ -12,9 +12,10 @@ ENV LC_ALL=C.UTF-8 \
 COPY Pipfile Pipfile.lock ./
 RUN set -ex && pip install pipenv --upgrade
 RUN set -ex && pipenv install --system
+RUN pip install gunicorn
+RUN pip install django-heroku
 
 # copy everything in backend root into docker image
 COPY . ./
 
-# exposes port
-EXPOSE 33325
+RUN python manage.py makemigrations && python manage.py migrate
