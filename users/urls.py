@@ -13,8 +13,7 @@ urlpatterns = [
     path('profiles/add_language/<str:username>/', views.add_language),
     path('',views.index),
     path('', include(router.urls)),
-    path('external-api/<int:id>/', views.external_api_view),
-    path('external-api/', views.external_api_view),
+    path('news/<str:source>/', views.news_view),
 ]
 
 # urlpatterns = format_suffix_patterns(urlpatterns)

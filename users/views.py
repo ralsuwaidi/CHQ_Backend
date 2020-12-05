@@ -1,4 +1,6 @@
+import json
 import time
+import urllib
 
 import requests
 from django.contrib.auth.models import User
@@ -9,8 +11,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework.views import APIView
-import urllib, json
+
+import users.news as news
 from users.exceptions import CannotCreateSameLanguage, ProfileNotCreated
 from users.models import Hackathon, LanguageWithScore, Profile
 from users.permissions import IsOwnerOrReadOnly
@@ -40,7 +42,6 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
         filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
         user = get_object_or_404(queryset, **filter_kwargs)
-        print(user)
 
         try:
             # get profile of user has a profile
@@ -62,14 +63,16 @@ def api_root(request, format=None):
         'profiles': reverse('profile-list', request=request, format=format)
     })
 
+
 @api_view(['GET'])
 def index(request):
-    url = "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fblog.codinghorror.com%2Frss%2F"
-    response = urllib.request.urlopen(url)
-
-    data = json.loads(response.read())
+    data = news.show_news("codinghorror")
     return Response(data=data)
 
+@api_view(['GET'])
+def news_view(request, source="codinghorror"):
+    data = news.show_news(source)
+    return Response(data=data)
 
 @api_view(['POST', 'GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
@@ -114,21 +117,3 @@ class HackathonViewset(viewsets.ModelViewSet):
     serializer_class = HackathonSerializer
 
 
-@api_view(['GET', ])
-def external_api_view(request, id=None):
-    attempt_num = 0  # keep track of how many times we've retried
-    while attempt_num < 5:
-        if id is None:
-            r = requests.get(
-                "https://hacker-news.firebaseio.com/v0/topstories.json", timeout=10)
-        else:
-            r = requests.get(
-                "https://hacker-news.firebaseio.com/v0/item/{}.json?".format(id), timeout=10)
-        if r.status_code == 200:
-            data = r.json()
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            attempt_num += 1
-            # You can probably use a logger to log the error here
-            time.sleep(5)  # Wait for 5 seconds before re-trying
-    return Response({"error": "Request failed"}, status=r.status_code)
