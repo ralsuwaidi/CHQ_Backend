@@ -1,4 +1,4 @@
-FROM python:3 AS worker
+FROM python:3
 ENV PYTHONUNBUFFERED 1
 
 # sets the working dir

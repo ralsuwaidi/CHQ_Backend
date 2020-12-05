@@ -1,0 +1,2 @@
+# API call : https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fblog.codinghorror.com%2Frss%2F
+# https://www.reddit.com/r/programming/comments/66678/ask_reddit_what_csprogramming_rss_feeds_should_i/

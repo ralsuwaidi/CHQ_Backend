@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
-
+import urllib, json
 from users.exceptions import CannotCreateSameLanguage, ProfileNotCreated
 from users.models import Hackathon, LanguageWithScore, Profile
 from users.permissions import IsOwnerOrReadOnly
@@ -64,8 +64,10 @@ def api_root(request, format=None):
 
 @api_view(['GET'])
 def index(request):
-    data={}
-    data["api-documentation"]="https://documenter.getpostman.com/view/13659675/TVmJjeuV"
+    url = "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fblog.codinghorror.com%2Frss%2F"
+    response = urllib.request.urlopen(url)
+
+    data = json.loads(response.read())
     return Response(data=data)
 
 

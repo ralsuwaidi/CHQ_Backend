@@ -13,13 +13,11 @@ django-cors-headers = "*"
 httpie = "*"
 django-allauth = "*"
 requests = "*"
+feedparser = "*"
 
 [dev-packages]
 pylint = "*"
 pylint-django = "*"
-
-[requires]
-python_version = ">=3.4"
 
 [packages.django-rest-auth]
 extras = [ "with-social",]
