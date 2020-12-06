@@ -53,7 +53,8 @@ class ProfileSerializer(serializers.ModelSerializer):
             'academic_qualification',
             'academic_qualification_file',
             'projects',
-            'hackathons'
+            'hackathons',
+            'news_pref',
         ]
         extra_kwargs = {'hackathons': {'required': False}}
 

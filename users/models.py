@@ -18,6 +18,7 @@ class Profile(models.Model):
     projects = models.CharField(_("projects"), blank=True, max_length=200)
     user = models.ForeignKey(
         'auth.User', related_name='profile', on_delete=models.CASCADE)
+    news_pref = models.CharField(blank=True, max_length=100)
 
     def __str__(self):
         return "%s's profile" % (self.user)
