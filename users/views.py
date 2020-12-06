@@ -74,6 +74,24 @@ def news_view(request, source="codinghorror"):
     data = news.show_news(source)
     return Response(data=data)
 
+@api_view(['GET'])
+def profile_news(request, username):
+    user = get_object_or_404(User.objects.all(), username=username)
+    # check if profile exists
+    try:
+        profile = Profile.objects.get(user=user.id)
+    except:
+        raise ProfileNotCreated
+
+    news_pref = profile.news_pref
+
+    data = None
+    if news_pref=="":
+        data = news.show_news("codinghorror")
+    else:
+        data = news.show_news(profile.news_pref)
+    return Response(data=data)
+
 @api_view(['POST', 'GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def add_language(request, username):
