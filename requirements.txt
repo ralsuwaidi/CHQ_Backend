@@ -1,0 +1,14 @@
+Django 
+psycopg2-binary 
+django-crispy-forms 
+Pillow 
+djangorestframework 
+django-cors-headers 
+httpie 
+django-allauth 
+requests 
+feedparser 
+django-jenkins 
+django-rest-auth 
+django-heroku 
+gunicorn 
