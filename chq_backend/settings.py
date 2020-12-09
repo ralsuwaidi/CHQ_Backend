@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['coders-hq.herokuapp.com', '127.0.0.1', 'coders-hq.tarektaha.co
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
+    'django_jenkins',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -164,4 +165,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Heroku integration
 django_heroku.settings(locals())
+
+
+# Jenkins integration
+PROJECT_APPS = ['users']
