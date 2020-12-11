@@ -109,6 +109,10 @@ WSGI_APPLICATION = 'chq_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# If no environment variable exists
+if os.environ['POSTGRES_HOST'] is None:
+    os.environ['POSTGRES_HOST'] = "postgres"
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
