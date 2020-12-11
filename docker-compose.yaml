@@ -7,12 +7,9 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-  backend:
+  django:
     build: .
-    command: >
-      sh -c "python manage.py makemigrations users &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:33325"
+    command: "python manage.py runserver 0.0.0.0:33325"
     volumes:
       - .:/app/backend
     ports:
