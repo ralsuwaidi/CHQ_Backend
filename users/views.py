@@ -66,7 +66,7 @@ def api_root(request, format=None):
 
 @api_view(['GET'])
 def index(request):
-    data = news.show_news("codinghorror")
+    data = news.show_news("lambda")
     return Response(data=data)
 
 @api_view(['GET'])
