@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     
     services:
-      db:
+      postgres:
         image: postgres
         env:
           POSTGRES_DB: postgres
@@ -52,6 +52,8 @@ jobs:
           
       # Run migration
       - name: Run migrations
+        env:
+          POSTGRES_HOST: postgres
         run: |
           python manage.py makemigrations users
           python manage.py migrate --database=postgres
