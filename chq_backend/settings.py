@@ -109,10 +109,6 @@ WSGI_APPLICATION = 'chq_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# If no environment variable exists
-if os.environ.get('POSTGRES_HOST') is None:
-    os.environ['POSTGRES_HOST'] = "postgres"
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -123,10 +119,13 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': os.environ['POSTGRES_HOST'],
+        'HOST': "db",
         'PORT': 5432,
     }
 }
+
+default_database = os.environ.get('DJANGO_DATABASE', 'default')
+DATABASES['default'] = DATABASES[default_database]
 
 
 # Password validation
