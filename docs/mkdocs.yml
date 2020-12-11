@@ -1,0 +1,8 @@
+site_name: Coders HQ Documentation
+repo_url: https://github.com/Coders-HQ/CHQ_Backend/
+edit_uri: '?query=docs/'
+site_description: This documentation site holds the Coders-HQ backend's information.
+docs_dir: docs/
+
+theme:
+  name: 'material'
