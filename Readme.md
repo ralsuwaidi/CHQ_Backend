@@ -1,5 +1,5 @@
 
-# Coders-HQ Backend
+# Coders HQ Backend
 
 This repository holds the Coders-HQ backend. It is made using [Django](https://www.djangoproject.com/) and [Postgres](https://www.postgresql.org/) as an API backend to the Coders-HQ frontend (based on [React](https://reactjs.org/)) which is hosted on another repository.
 
@@ -9,13 +9,12 @@ This repository holds the Coders-HQ backend. It is made using [Django](https://w
 
 1.  python 3
 1.  Pip
-3.  pipenv
 2.  (Optional) docker
 2.  (Optional) httpie
 
 ### Building locally
 
-1.  run `pipenv shell` in root dir 
+1.  run `pip install -r requirements.txt` in root dir 
 1.  run `python manage.py migrate`
 1.  run `python manage.py createsuperuser`
 1.  Run `python manage.py runserver 0.0.0.0:33325`
@@ -23,8 +22,7 @@ This repository holds the Coders-HQ backend. It is made using [Django](https://w
 
 ### Building on Docker
 
-1.  make sure you have the correct Database in settings.py
-3.  Run `docker-compose up` in root dir and it will create the django and postgres apps, it will also run the web app
+3.  Run `docker-compose up` in __root dir__ and it will create the django and postgres apps, it will also run the web app
 1.  On a web browser open localhost:33325
 
 ## API
