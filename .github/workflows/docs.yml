@@ -1,4 +1,4 @@
-name: build docs
+name: Build Documentation
 on:
   push:
     branches:
@@ -13,4 +13,5 @@ jobs:
         with:
           python-version: 3.x
       - run: pip install mkdocs-material
+      - run: mv README.md docs/
       - run: mkdocs gh-deploy --force
