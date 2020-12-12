@@ -26,7 +26,7 @@ jobs:
 
       # run docker compose test
       - name: Spin compose backend
-        run: docker-compose up backend -d
+        run: docker-compose up -d backend 
 
       - name: Run test
         run: docker-compose run backend python manage.py jenkins
