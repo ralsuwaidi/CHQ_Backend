@@ -35,6 +35,9 @@ class Profile(models.Model):
         if self.total_score() != 100:
             raise CustomExceptions.ScoreNot100
 
+        if self.news_pref == "":
+            self.news_pref = config.DEFAULT_NEWS
+
         if self.news_pref not in config.NEWS_SITES:
             raise CustomExceptions.NewsSourceNotAvailable
 
