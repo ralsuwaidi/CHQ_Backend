@@ -28,13 +28,14 @@ jobs:
       - name: Spin compose backend
         run: docker-compose up -d backend 
 
+      # Run junit test
       - name: Run test
         run: docker-compose run backend python manage.py jenkins
 
-      # Runs a single command using the runners shell
-      - name: check if file exists 
-        run: ls -la
-
-      - name: check if file exists 
-        run: ls reports
+      # Publish result
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: reports/*.xml
 
