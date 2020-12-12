@@ -65,21 +65,15 @@ def api_root(request, format=None):
         'profiles': reverse('profile-list', request=request, format=format)
     })
 
-
 @api_view(['GET'])
 def index(request):
-    data = news.show_news("lambda")
-    return Response(data=data)
-
-@api_view(['GET'])
-def news_view(request, source=config.DEFAULT_NEWS):
-    """shows a generic source of news"""
-    data = news.show_news(source)
+    """default root directory will show news as json"""
+    data = news.show_news(config.DEFAULT_NEWS)
     return Response(data=data)
 
 @api_view(['GET'])
 def profile_news(request, username):
-    """get current user's prefered news"""
+    """get current user's prefered news source as json"""
 
     user = get_object_or_404(User.objects.all(), username=username)
     # check if profile exists
@@ -104,7 +98,7 @@ def profile_news(request, username):
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def add_language(request, username):
     """
-    List all code snippets, or create a new snippet.
+    List all languages user knows, or create a new language and link to user.
     """
     if request.method == 'POST':
         serializer = LanguageSerializer(data=request.data)

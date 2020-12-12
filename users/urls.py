@@ -14,7 +14,6 @@ urlpatterns = [
     path('profiles/<str:username>/news/', views.profile_news),
     path('',views.index),
     path('', include(router.urls)),
-    path('news/<str:source>/', views.news_view),
 ]
 
 # urlpatterns = format_suffix_patterns(urlpatterns)
