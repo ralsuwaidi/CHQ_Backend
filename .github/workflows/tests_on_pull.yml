@@ -25,10 +25,16 @@ jobs:
       - uses: actions/checkout@v2
 
       # run docker compose test
-      - name: Run docker compose
-        run: docker-compose run --rm backend python manage.py jenkins
+      - name: Spin compose backend
+        run: docker-compose up backend
+
+      - name: Run test
+        run: docker-compose run backend python manage.py jenkins
 
       # Runs a single command using the runners shell
       - name: check if file exists 
         run: ls -la
+
+      - name: check if file exists 
+        run: ls reports
 
