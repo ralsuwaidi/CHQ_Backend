@@ -18,6 +18,8 @@ services:
              python manage.py makemigrations users &&
              python manage.py migrate --database=postgres &&
              python manage.py runserver 0.0.0.0:33325"
+    volumes: 
+      - ".:/app/backend"
     ports:
       - "33325:33325"
     depends_on:
