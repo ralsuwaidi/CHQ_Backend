@@ -1,3 +1,5 @@
+# build mkdocs documentation  on commit
+
 name: Build Documentation
 on:
   push:
