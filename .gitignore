@@ -1,5 +1,6 @@
 # dev env
 .vscode
+Pipfile
 
 # python build
 __pycache__
