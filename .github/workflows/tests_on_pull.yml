@@ -26,7 +26,9 @@ jobs:
 
       # run docker compose test
       - name: Spin compose backend
-        run: docker-compose up -d backend 
+        run: |
+          docker-compose run backend python manage.py makemigrations users
+          docker-compose run backend python manage.py migrate
 
       # Run junit test
       - name: Run test
