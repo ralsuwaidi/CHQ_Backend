@@ -1,6 +1,7 @@
 from django.db import models
-from users.exceptions import ScoreNot100
+import users.exceptions as CustomExceptions
 from django.utils.translation import gettext_lazy as _
+import users.config as config
 
 
 class Profile(models.Model):
@@ -32,7 +33,11 @@ class Profile(models.Model):
         representation of the code snippet.
         """
         if self.total_score() != 100:
-            raise ScoreNot100
+            raise CustomExceptions.ScoreNot100
+
+        if self.news_pref not in config.NEWS_SITES:
+            raise CustomExceptions.NewsSourceNotAvailable
+        
         super(Profile, self).save(*args, **kwargs)
 
 

@@ -13,11 +13,13 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 import users.news as news
-from users.exceptions import CannotCreateSameLanguage, ProfileNotCreated
+import users.exceptions as CustomExceptions
 from users.models import Hackathon, LanguageWithScore, Profile
 from users.permissions import IsOwnerOrReadOnly
 from users.serializers import (HackathonSerializer, LanguageSerializer,
                                ProfileSerializer)
+
+import users.config as config
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -70,25 +72,31 @@ def index(request):
     return Response(data=data)
 
 @api_view(['GET'])
-def news_view(request, source="codinghorror"):
+def news_view(request, source=config.DEFAULT_NEWS):
+    """shows a generic source of news"""
     data = news.show_news(source)
     return Response(data=data)
 
 @api_view(['GET'])
 def profile_news(request, username):
+    """get current user's prefered news"""
+
     user = get_object_or_404(User.objects.all(), username=username)
     # check if profile exists
     try:
         profile = Profile.objects.get(user=user.id)
     except:
-        raise ProfileNotCreated
+        raise CustomExceptions.ProfileNotCreated
 
+    # check if prefered news exists within saved news
     news_pref = profile.news_pref
 
     data = None
     if news_pref=="":
-        data = news.show_news("codinghorror")
+        data = news.show_news(config.DEFAULT_NEWS)
     else:
+        if news_pref not in config.NEWS_SITES:
+            raise CustomExceptions.NewsSourceNotAvailable
         data = news.show_news(profile.news_pref)
     return Response(data=data)
 
@@ -107,12 +115,12 @@ def add_language(request, username):
             try:
                 profile = Profile.objects.get(user=user.id)
             except:
-                raise ProfileNotCreated
+                raise CustomExceptions.ProfileNotCreated
 
             # same language cannot be added twice
             languages = LanguageWithScore.objects.all()
             if languages.filter(name=request.data['name']).exists():
-                raise CannotCreateSameLanguage
+                raise CustomExceptions.CannotCreateSameLanguage
 
             # save to db
             serializer.save(profile=profile)
