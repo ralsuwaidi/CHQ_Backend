@@ -5,6 +5,7 @@ site_description: This documentation site holds the Coders-HQ backend's informat
 site_url: 'https://docs.codershq.ae'
 nav:
     - Suggestions: 'suggestions.md'
+    - News: "news.md"
 
 theme:
   name: 'material'
