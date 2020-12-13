@@ -7,6 +7,19 @@ Table of Contents
 =================
 
 <!--ts-->
+   * [Coders HQ Backend](#coders-hq-backend)
+   * [Table of Contents](#table-of-contents)
+      * [Building](#building)
+         * [Pre requisites](#pre-requisites)
+         * [Building locally](#building-locally)
+         * [Building on Docker](#building-on-docker)
+      * [API](#api)
+      * [Architecture](#architecture)
+      * [Database](#database)
+      * [News](#news)
+
+<!-- Added by: runner, at: Sun Dec 13 15:12:40 UTC 2020 -->
+
 <!--te-->
 
 ## Installation
