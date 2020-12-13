@@ -3,6 +3,12 @@
 
 This repository holds the Coders-HQ backend. It is made using [Django](https://www.djangoproject.com/) and [Postgres](https://www.postgresql.org/) as an API backend to the Coders-HQ frontend (based on [React](https://reactjs.org/)) which is hosted on another repository.
 
+Table of Contents
+=================
+
+<!--ts-->
+<!--te-->
+
 ## Building
 
 ### Pre requisites

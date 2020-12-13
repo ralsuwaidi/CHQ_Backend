@@ -10,8 +10,21 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+
       - uses: actions/checkout@v2
+
+      # Update readme with auto-generated TOC
+      - run: |
+          curl https://raw.githubusercontent.com/ekalinin/github-markdown-toc/master/gh-md-toc -o gh-md-toc
+          chmod a+x gh-md-toc
+          ./gh-md-toc --insert --no-backup README.md
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Auto update markdown TOC
+
+      # Deploy
       - uses: actions/setup-python@v2
+
         with:
           python-version: 3.x
       - run: pip install mkdocs-material
