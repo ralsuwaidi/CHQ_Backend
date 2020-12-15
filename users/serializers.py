@@ -55,6 +55,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             'projects',
             'hackathons',
             'news_pref',
+            'new_language'
         ]
         extra_kwargs = {'hackathons': {'required': False}}
 

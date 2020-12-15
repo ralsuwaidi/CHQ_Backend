@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 import users.config as config
 from users.utils import external_api
 
-
 class Profile(models.Model):
     github_url = models.URLField(blank=True, default="")
     bio = models.TextField(blank=True)
@@ -21,6 +20,7 @@ class Profile(models.Model):
     user = models.ForeignKey(
         'auth.User', related_name='profile', on_delete=models.CASCADE)
     news_pref = models.CharField(blank=True, max_length=100)
+    new_language = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return "%s's profile" % (self.user)
