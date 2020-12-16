@@ -14,9 +14,9 @@ from rest_framework.reverse import reverse
 
 import users.news as news
 import users.exceptions as CustomExceptions
-from users.models import Hackathon, LanguageWithScore, Profile
+from users.models import Hackathon, Profile
 from users.permissions import IsOwnerOrReadOnly
-from users.serializers import (HackathonSerializer, LanguageSerializer,
+from users.serializers import (HackathonSerializer,
                                ProfileSerializer)
 
 import users.config as config
@@ -93,40 +93,6 @@ def profile_news(request, username):
             raise CustomExceptions.NewsSourceNotAvailable
         data = news.show_news(profile.news_pref)
     return Response(data=data)
-
-@api_view(['POST', 'GET'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def add_language(request, username):
-    """
-    List all languages user knows, or create a new language and link to user.
-    """
-    if request.method == 'POST':
-        serializer = LanguageSerializer(data=request.data)
-        if serializer.is_valid():
-            user = get_object_or_404(User.objects.all(), username=username)
-
-            # check if profile exists
-            try:
-                profile = Profile.objects.get(user=user.id)
-            except:
-                raise CustomExceptions.ProfileNotCreated
-
-            # same language cannot be added twice
-            languages = LanguageWithScore.objects.all()
-            if languages.filter(name=request.data['name']).exists():
-                raise CustomExceptions.CannotCreateSameLanguage
-
-            # save to db
-            serializer.save(profile=profile)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'GET':
-        # get all languages related to user
-        user = get_object_or_404(User.objects.all(), username=username)
-        lang = LanguageWithScore.objects.filter(profile=user.pk)
-        serializer = LanguageSerializer(lang, many=True)
-        return Response(serializer.data)
 
 
 class HackathonViewset(viewsets.ModelViewSet):

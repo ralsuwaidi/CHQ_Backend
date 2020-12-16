@@ -10,3 +10,4 @@ django-jenkins
 django-rest-auth 
 django-heroku 
 gunicorn 
+jsonschema
