@@ -1,26 +1,39 @@
+from django.core.exceptions import ValidationError
 from django.db import models
-import users.exceptions as CustomExceptions
 from django.utils.translation import gettext_lazy as _
-import users.config as config
+
+import users.exceptions as CustomExceptions
+from users import config, schema, validators
 from users.utils import external_api
+
 
 class Profile(models.Model):
     github_url = models.URLField(blank=True, default="")
     bio = models.TextField(blank=True)
+    cv = models.FileField(null=True, upload_to="cv")
+    academic_qualification = models.CharField(blank=True, max_length=30)
+    projects = models.CharField(_("projects"), blank=True, max_length=200)
+    academic_qualification_file = models.FileField(
+        null=True, upload_to="academic")
+
+    # must add up to 100
     front_end_score = models.IntegerField(null=False, default=20)
     back_end_score = models.IntegerField(null=False, default=20)
     database_score = models.IntegerField(null=False, default=20)
     devops_score = models.IntegerField(null=False, default=20)
     mobile_score = models.IntegerField(null=False, default=20)
-    cv = models.FileField(null=True, upload_to="cv")
-    academic_qualification = models.CharField(blank=True, max_length=30)
-    academic_qualification_file = models.FileField(
-        null=True, upload_to="academic")
-    projects = models.CharField(_("projects"), blank=True, max_length=200)
+
+    # connect to user 
     user = models.ForeignKey(
         'auth.User', related_name='profile', on_delete=models.CASCADE)
-    news_pref = models.CharField(blank=True, max_length=100)
-    new_language = models.JSONField(null=True, blank=True)
+    
+    # default news if none selected
+    news_pref = models.CharField(max_length=100, default=config.DEFAULT_NEWS, validators=[
+                                 validators.validate_no_news_source])
+
+    # validated using schema
+    languages = models.JSONField(null=True, blank=True, validators=[
+        validators.JSONSchemaValidator(limit_value=schema.LANGUAGE_SCHEMA)])
 
     def __str__(self):
         return "%s's profile" % (self.user)
@@ -35,50 +48,27 @@ class Profile(models.Model):
         if self.total_score() != 100:
             raise CustomExceptions.ScoreNot100
 
-        if self.news_pref == "":
-            self.news_pref = config.DEFAULT_NEWS
+        # added_language = self.name[0].capitalize()+self.name[1:]
+        # data = external_api.get_programming_language(added_language)
 
-        if self.news_pref not in config.NEWS_SITES:
-            raise CustomExceptions.NewsSourceNotAvailable
+        # if len(data['results']) == 0:
+        #     raise CustomExceptions.CannotCreateSameLanguage
+
+        # for i in data["results"]:
+        #     if i["ProgrammingLanguage"] != added_language:
+        #         raise CustomExceptions.LanguageNotFound(
+        #             [i["ProgrammingLanguage"] for i in data['results']])
+        #     else:
+        #         print(True)
 
         super(Profile, self).save(*args, **kwargs)
-
-
-class LanguageWithScore(models.Model):
-    name = models.CharField(max_length=30)
-    score = models.IntegerField()
-    profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name='languages')
-
-    def save(self, *args, **kwargs):
-
-        added_language = self.name[0].capitalize()+self.name[1:]
-        data = external_api.get_programming_language(added_language)
-        
-        if len(data['results'])==0:
-            raise CustomExceptions.CannotCreateSameLanguage
-
-        for i in data["results"]:
-            if i["ProgrammingLanguage"] != added_language:
-                raise CustomExceptions.LanguageNotFound([i["ProgrammingLanguage"] for i in data['results']])
-            else:
-                print(True)
-
-
-        super(LanguageWithScore, self).save(*args, **kwargs)
-
-
-    def __str__(self):
-        return "%s: %d" % (self.name, self.score)
-
-    class Meta:
-        ordering = ['score']
 
 
 class Hackathon(models.Model):
     date = models.DateField()
     location = models.CharField(max_length=30)
-    members = models.ManyToManyField(Profile, related_name="hackathons", blank=True)
+    members = models.ManyToManyField(
+        Profile, related_name="hackathons", blank=True)
     website = models.URLField(null=True)
     title = models.CharField(max_length=30)
 
