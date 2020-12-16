@@ -12,6 +12,9 @@ ENV LC_ALL=C.UTF-8 \
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
+RUN python manage.py makemigrations
+RUN python manage.py migrate 
+
 # copy everything in backend root into docker image
 COPY . ./
 
