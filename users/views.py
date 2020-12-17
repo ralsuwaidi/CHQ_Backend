@@ -19,7 +19,7 @@ from users.permissions import IsOwnerOrReadOnly
 from users.serializers import (HackathonSerializer,
                                ProfileSerializer)
 
-import users.config as config
+from users import news
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -68,7 +68,7 @@ def api_root(request, format=None):
 @api_view(['GET'])
 def index(request):
     """default root directory will show news as json"""
-    data = news.show_news(config.DEFAULT_NEWS)
+    data = news.show_news(news.DEFAULT_NEWS)
     return Response(data=data)
 
 @api_view(['GET'])
@@ -87,9 +87,9 @@ def profile_news(request, username):
 
     data = None
     if news_pref=="":
-        data = news.show_news(config.DEFAULT_NEWS)
+        data = news.show_news(news.DEFAULT_NEWS)
     else:
-        if news_pref not in config.NEWS_SITES:
+        if news_pref not in news.NEWS_SITES:
             raise CustomExceptions.NewsSourceNotAvailable
         data = news.show_news(profile.news_pref)
     return Response(data=data)

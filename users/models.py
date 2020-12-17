@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 import users.exceptions as CustomExceptions
-from users import config, schema, validators
+from users import news, schema, validators
 from users.utils import external_api
 
 
@@ -28,7 +28,7 @@ class Profile(models.Model):
         'auth.User', related_name='profile', on_delete=models.CASCADE)
     
     # default news if none selected
-    news_pref = models.CharField(max_length=100, default=config.DEFAULT_NEWS, validators=[
+    news_pref = models.CharField(max_length=100, default=news.DEFAULT_NEWS, validators=[
                                  validators.validate_no_news_source])
 
     # validated using schema

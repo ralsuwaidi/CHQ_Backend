@@ -1,5 +1,5 @@
 from rest_framework.exceptions import APIException
-import users.config as config
+from users import news
 
 class ScoreNot100(APIException):
     status_code = 400
@@ -18,7 +18,7 @@ class CannotCreateSameLanguage(APIException):
 
 class NewsSourceNotAvailable(APIException):
     status_code = 400
-    default_detail = f'News source not available, please use one of the available news sources {config.NEWS_SITES}'
+    default_detail = f'News source not available, please use one of the available news sources {news.NEWS_SITES}'
     default_code = 'cannot_add_same_language'
 
 class LanguageNotFound(APIException):

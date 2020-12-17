@@ -3,7 +3,7 @@ Custom model validators
 """
 
 from django.core.exceptions import ValidationError
-import users.config as config
+from users import news
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import BaseValidator
 import jsonschema
@@ -22,13 +22,17 @@ class JSONSchemaValidator(BaseValidator):
 
 
 def validate_no_news_source(value):
-    if value not in config.NEWS_SITES:
+    """news needs to be part of news source"""
+
+    if value not in news.NEWS_SITES:
         raise ValidationError(
             _('%(value)s is not an available news source'),
             params={'value': value},
         )
 
 def validate_github_url(value):
+    """validate github profile"""
+
     pattern = r'github.com\/[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*\/?'
     if re.search(pattern, value) is None:
         raise ValidationError(
