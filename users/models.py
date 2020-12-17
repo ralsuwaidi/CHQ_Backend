@@ -8,7 +8,7 @@ from users.utils import external_api
 
 
 class Profile(models.Model):
-    github_url = models.URLField(blank=True, default="")
+    github_url = models.URLField(blank=True, validators=[validators.validate_github_url])
     bio = models.TextField(blank=True)
     cv = models.FileField(null=True, upload_to="cv")
     academic_qualification = models.CharField(blank=True, max_length=30)
