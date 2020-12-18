@@ -1,6 +1,7 @@
 # dev env
 .vscode
 Pipfile
+Pipfile.lock
 
 # python build
 __pycache__
