@@ -35,7 +35,7 @@ def validate_no_news_source(value):
 def validate_github_url(value):
     """validate github profile"""
 
-    pattern = r'github.com\/[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*\/?'
+    pattern = r'github.com\/[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*\/?$'
     if re.search(pattern, value) is None:
         raise ValidationError(
             _('%(value)s is not a valid github profile.'),
