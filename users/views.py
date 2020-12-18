@@ -47,10 +47,11 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
         try:
             # get profile of user has a profile
-            profile = Profile.objects.get(id=user.id)
+            profile = Profile.objects.get(user=user)
         except:
             # ceate new profile for the user
-            profile = Profile(id=user.id, user=user)
+            profile = Profile(user=user)
+            profile.full_clean()
             profile.save()
 
         # May raise a permission denied
