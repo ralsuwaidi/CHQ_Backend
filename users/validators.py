@@ -2,13 +2,15 @@
 Custom model validators
 """
 
-from django.core.exceptions import ValidationError
-from users import news
-from django.utils.translation import gettext_lazy as _
-from django.core.validators import BaseValidator
-import jsonschema
-import django
 import re
+
+import django
+import jsonschema
+from django.core.exceptions import ValidationError
+from django.core.validators import BaseValidator
+from django.utils.translation import gettext_lazy as _
+
+from users import news
 
 
 class JSONSchemaValidator(BaseValidator):

@@ -4,8 +4,13 @@ edit_uri: '?query=docs/'
 site_description: This documentation site holds the Coders-HQ backend's information.
 site_url: 'https://docs.codershq.ae'
 nav:
-    - Suggestions: 'suggestions.md'
+    - Challenges:
+      - 'challenges/kaggle_case_study.md'
     - News: "news.md"
 
 theme:
   name: 'material'
+
+markdown_extensions:
+  - plantuml_markdown:
+      server: http://www.plantuml.com/plantuml
