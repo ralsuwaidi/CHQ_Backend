@@ -70,7 +70,7 @@ class ProfileApiTest(APITestCase):
         self.assertEqual(response.data['first_name'], 'mahalo')
         self.client.credentials()
 
-    def test_get_profile(self):
+    def test_get_default_profile(self):
         # Create an instance of a GET request.
         response = self.client.get('/profiles/user1/')
 
@@ -94,3 +94,31 @@ class ProfileApiTest(APITestCase):
             'hackathons': [],
             'news_pref': 'lambda'
         })
+
+    def test_profile_add_bio(self):
+        data = {'bio': 'This is a test bio'}
+        token = Token.objects.get(user=self.user1)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = self.client.put('/profiles/user1/', data)
+        self.assertEqual(response.data['bio'], 'This is a test bio')
+        self.client.credentials()
+
+    def test_profile_correct_github(self):
+        key = 'github_url'
+        value = 'https://github.com/profile/'
+        data = {key: value}
+        token = Token.objects.get(user=self.user1)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = self.client.put('/profiles/user1/', data)
+        self.assertEqual(response.data[key], value)
+        self.client.credentials()
+
+    def test_profile_wrong_github(self):
+        key = 'github_url'
+        value = 'https://github.com/profile/wrong'
+        data = {key: value}
+        token = Token.objects.get(user=self.user1)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = self.client.put('/profiles/user1/', data)
+        self.assertEqual(str(response.data[key][0]), value+' is not a valid github profile.')
+        self.client.credentials()
