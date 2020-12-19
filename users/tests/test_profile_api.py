@@ -49,6 +49,27 @@ class ProfileApiTest(APITestCase):
         is_tokened = Token.objects.filter(user=self.user1).exists()
         self.assertEqual(is_tokened, True)
 
+    def test_user_login(self):
+        data = {'username': 'user1', "password": "myNEWPASS123"}
+        response = self.client.post('/auth/login/', data)
+        token = Token.objects.get(user=self.user1)
+        self.assertEqual(response.data['key'], token.key)
+
+    def test_change_user_detail_no_auth(self):
+        data = {'first_name': 'mahalo', "last_name": "aloha"}
+        response = self.client.put('/auth/user/', data)
+        self.assertEqual(
+            response.data['detail'], 'Authentication credentials were not provided.')
+
+    def test_change_user_detail(self):
+        data = {'username': 'user1',
+                'first_name': 'mahalo', "last_name": "aloha"}
+        token = Token.objects.get(user=self.user1)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = self.client.put('/auth/user/', data)
+        self.assertEqual(response.data['first_name'], 'mahalo')
+        self.client.credentials()
+
     def test_get_profile(self):
         # Create an instance of a GET request.
         response = self.client.get('/profiles/user1/')
