@@ -21,6 +21,6 @@ DEFAULT_NEWS = "lambda"
 
 def show_news(news_source):
     """return json response of news"""
-    response = urllib.request.urlopen(news.NEWS_SITES[news_source])
+    response = urllib.request.urlopen(NEWS_SITES[news_source])
     data = json.loads(response.read())
     return data
