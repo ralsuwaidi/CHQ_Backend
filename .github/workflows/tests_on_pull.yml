@@ -28,6 +28,8 @@ jobs:
       - name: Spin compose backend
         run: |
           docker-compose run backend ./wait-for-it.sh db:5432
+          docker-compose run backend python manage.py makemigrations users
+          docker-compose run backend python manage.py migrate
 
       # Run junit test
       - name: Run test
