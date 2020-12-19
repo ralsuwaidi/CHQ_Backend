@@ -5,10 +5,9 @@ name: Django Test
 # Controls when the action will run. 
 on:
   # Triggers the workflow on pull request events but only for the main branch
-  pull_request:
-    branches: [ main ]
   push:
     branches: [ main ]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -27,7 +26,14 @@ jobs:
 
       # run docker compose test
       - name: Spin compose backend
-        run: ./run_unittest.sh
+        run: |
+          docker-compose run backend ./wait-for-it.sh db:5432
+          docker-compose run backend python manage.py makemigrations users
+          docker-compose run backend python manage.py migrate
+
+      # Run junit test
+      - name: Run test
+        run: docker-compose run backend python manage.py jenkins
 
       # Publish result
       - name: Publish Test Report
