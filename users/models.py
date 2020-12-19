@@ -1,5 +1,8 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 import users.exceptions as CustomExceptions
@@ -58,6 +61,11 @@ class Profile(models.Model):
 
         super(Profile, self).save(*args, **kwargs)
 
+
+@receiver(post_save, sender=User)
+def create_user_cart(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
 class Hackathon(models.Model):
     date = models.DateField()

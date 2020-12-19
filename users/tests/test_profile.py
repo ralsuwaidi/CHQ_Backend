@@ -1,9 +1,8 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from users import exceptions
+from users import exceptions, news
 from users.models import Profile
-from users import news
 
 
 class UserModelTest(TestCase):
@@ -15,9 +14,19 @@ class UserModelTest(TestCase):
                             email='test@email.com',
                             password='Bob').set_password("mynewPASS33")
 
-        Profile.objects.create(
-            user=User.objects.get(id=1)
-        )
+
+    def test_create_new_user(self):
+        user = User()
+        user.username = "newUser"
+        user.set_password("new_pass")
+        user.email= "emailME@email.com"
+        user.full_clean()
+        user.save()
+
+    def test_automatic_profile_creation(self):
+        user = User.objects.get(username="testUsername")
+        profile2 = Profile.objects.get(user=user)
+        self.assertEqual(profile2.user.email, "test@email.com")
 
     def test_first_name_label(self):
         user = User.objects.get(id=1)
@@ -27,6 +36,7 @@ class UserModelTest(TestCase):
     def test_user_change_password(self):
         user = User.objects.get(id=1)
         user.set_password("userNEWpass")
+        user.full_clean()
         self.assertEqual(user.check_password("userNEWpass"), True)
 
     def test_user_profile_default_score(self):
@@ -120,6 +130,13 @@ class UserModelTest(TestCase):
         profile.languages = wrong_struct
         self.assertRaises(ValidationError, profile.full_clean)
         profile.languages = wrong_values
+        self.assertRaises(ValidationError, profile.full_clean)
+
+    def test_languages_wrong_score(self):
+        profile = Profile.objects.get(id=1)
+        wrong_score = [{"name": "django", "category": "back_end", "score": 11}, {
+            "name": "react", "category": "front_end", "score": 1}]
+        profile.languages = wrong_score
         self.assertRaises(ValidationError, profile.full_clean)
 
     def test_right_language_schema(self):
