@@ -3,9 +3,10 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from users import exceptions, news
 from users.models import Profile
+from rest_framework.test import APIRequestFactory
 
 
-class UserModelTest(TestCase):
+class ProfileModelTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -14,12 +15,13 @@ class UserModelTest(TestCase):
                             email='test@email.com',
                             password='Bob').set_password("mynewPASS33")
 
+    # Test profile model
 
     def test_create_new_user(self):
         user = User()
         user.username = "newUser"
         user.set_password("new_pass")
-        user.email= "emailME@email.com"
+        user.email = "emailME@email.com"
         user.full_clean()
         user.save()
 
