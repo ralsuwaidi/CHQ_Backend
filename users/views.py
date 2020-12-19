@@ -83,16 +83,7 @@ def profile_news(request, username):
     except:
         raise CustomExceptions.ProfileNotCreated
 
-    # check if prefered news exists within saved news
-    news_pref = profile.news_pref
-
-    data = None
-    if news_pref=="":
-        data = news.show_news(news.DEFAULT_NEWS)
-    else:
-        if news_pref not in news.NEWS_SITES:
-            raise CustomExceptions.NewsSourceNotAvailable
-        data = news.show_news(profile.news_pref)
+    data = news.show_news(profile.news_pref)
     return Response(data=data)
 
 
