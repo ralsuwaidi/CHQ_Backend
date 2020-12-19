@@ -1,25 +1,17 @@
 import json
-import time
-import urllib
 
-import requests
 from django.contrib.auth.models import User
-from rest_framework import generics, permissions, status, viewsets
-from rest_framework.decorators import (api_view, authentication_classes,
-                                       permission_classes)
+from rest_framework import generics, permissions, viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-import users.news as news
-import users.exceptions as CustomExceptions
+from users import news
 from users.models import Hackathon, Profile
 from users.permissions import IsOwnerOrReadOnly
-from users.serializers import (HackathonSerializer,
-                               ProfileSerializer)
-
-from users import news
+from users.serializers import HackathonSerializer, ProfileSerializer
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
