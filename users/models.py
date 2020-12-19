@@ -46,6 +46,10 @@ class Profile(models.Model):
     def __str__(self):
         return "%s's profile" % (self.user)
 
+    @property
+    def user__username(self):
+        return self.user.username
+
     def total_self_score(self):
         return self.mobile_score+self.devops_score+self.database_score+self.front_end_score+self.back_end_score
 

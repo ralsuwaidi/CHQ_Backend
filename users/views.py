@@ -23,41 +23,11 @@ from users import news
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    lookup_field = 'username'
+    lookup_field = 'user__username'
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
-
-    def get_object(self):
-        """
-        Returns the object the view is displaying.
-
-        You may want to override this if you need to provide non-standard
-        queryset lookups.  Eg if objects are referenced using multiple
-        keyword arguments in the url conf.
-        """
-        queryset = self.filter_queryset(self.get_queryset())
-
-        # Perform the lookup filtering.
-        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-
-        filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
-        user = get_object_or_404(queryset, **filter_kwargs)
-
-        try:
-            # get profile of user has a profile
-            profile = Profile.objects.get(user=user)
-        except:
-            # ceate new profile for the user
-            profile = Profile(user=user)
-            profile.full_clean()
-            profile.save()
-
-        # May raise a permission denied
-        self.check_object_permissions(self.request, profile)
-
-        return profile
 
 
 @api_view(['GET'])
@@ -66,22 +36,21 @@ def api_root(request, format=None):
         'profiles': reverse('profile-list', request=request, format=format)
     })
 
+
 @api_view(['GET'])
 def index(request):
     """default root directory will show news as json"""
     data = news.show_news(news.DEFAULT_NEWS)
     return Response(data=data)
 
+
 @api_view(['GET'])
 def profile_news(request, username):
     """get current user's prefered news source as json"""
 
     user = get_object_or_404(User.objects.all(), username=username)
-    # check if profile exists
-    try:
-        profile = Profile.objects.get(user=user.id)
-    except:
-        raise CustomExceptions.ProfileNotCreated
+
+    profile = Profile.objects.get(user=user)
 
     data = news.show_news(profile.news_pref)
     return Response(data=data)
@@ -93,5 +62,3 @@ class HackathonViewset(viewsets.ModelViewSet):
     """
     queryset = Hackathon.objects.all()
     serializer_class = HackathonSerializer
-
-
