@@ -29,7 +29,7 @@ class Profile(models.Model):
     mobile_score = models.IntegerField(null=False, default=20)
 
     # connect to user
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         'auth.User', related_name='profile', on_delete=models.CASCADE)
 
     # default news if none selected
